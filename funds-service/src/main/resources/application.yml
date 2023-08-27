@@ -1,0 +1,27 @@
+server:
+  port: 8085
+spring:
+  application:
+    name: funds-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/funds
+    username: root
+    password: 123
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
