@@ -1,4 +1,4 @@
-package com.iamneo.microservice.userservice;
+package com.iamneo.microservices.userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

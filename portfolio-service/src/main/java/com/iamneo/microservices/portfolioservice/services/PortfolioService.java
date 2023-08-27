@@ -1,10 +1,10 @@
-package com.iamneo.microservices.portfolioservice.service;
+package com.iamneo.microservices.portfolioservice.services;
 
 import com.iamneo.microservices.portfolioservice.model.Portfolio;
 import com.iamneo.microservices.portfolioservice.model.PortfolioResponseDto;
 import com.iamneo.microservices.portfolioservice.model.StockDto;
 import com.iamneo.microservices.portfolioservice.repository.PortfolioRepository;
-import com.iamneo.microservices.portfolioservice.service.client.StocksFeignClient;
+import com.iamneo.microservices.portfolioservice.services.client.StocksFeignClient;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ public class PortfolioService {
     @Transactional
     public String addStock(Portfolio portfolio){
 
-        Portfolio existingQuantity = portfolioRepository.findByCustomerIdAndStockId(portfolio.getCustomerId(), portfolio.getStockId());
+        Portfolio existingQuantity = portfolioRepository.findByCustomerIdAndStockSymbol(portfolio.getCustomerId(), portfolio.getStockSymbol());
 
         if (existingQuantity != null){
 
-            existingQuantity.addQuantity(portfolio.getQuantity());
+            existingQuantity.addQuantity(portfolio.getQuantity(), portfolio.getBuyPrice());
             portfolioRepository.save(existingQuantity);
         }else {
 
@@ -42,7 +42,7 @@ public class PortfolioService {
     @Transactional
     public String sellStock(Portfolio portfolio){
 
-        Portfolio existingQuantity = portfolioRepository.findByCustomerIdAndStockId(portfolio.getCustomerId(), portfolio.getStockId());
+        Portfolio existingQuantity = portfolioRepository.findByCustomerIdAndStockSymbol(portfolio.getCustomerId(), portfolio.getStockSymbol());
 
         if (existingQuantity != null){
 
@@ -51,7 +51,7 @@ public class PortfolioService {
                 return "Invalid Sell Quantity";
             }else if (existingQuantity.getQuantity().equals(portfolio.getQuantity())){
 
-                portfolioRepository.deleteById(existingQuantity.getId());
+                portfolioRepository.deleteByStockSymbol(existingQuantity.getStockSymbol());
             }else {
                 existingQuantity.reduceQuantity(portfolio.getQuantity());
                 portfolioRepository.save(existingQuantity);
@@ -68,22 +68,29 @@ public class PortfolioService {
 
         if (getStocks.isEmpty()){
 
-            List<Long> stocksList = getStocks.stream().map(Portfolio::getStockId).toList();
+            List<String> stocksList = getStocks.stream().map(Portfolio::getStockSymbol).toList();
 
-            Map<Long,StockDto> stocksDetails = stocksFeignClient.getStocksDetails(stocksList).stream().
-                    collect(Collectors.toMap(StockDto::getId, (i)->i));
+            Map<String,StockDto> stocksDetails = stocksFeignClient.getStocksDetails(stocksList).stream().
+                    collect(Collectors.toMap(StockDto::getSymbol, (i)->i));
 
             double totalAmount = 0.0;
 
             for (Portfolio stock : getStocks) {
-                stocksDetails.get(stock.getStockId()).setQuantity(stock.getQuantity());
-                totalAmount += (stock.getQuantity() * stocksDetails.get(stock.getStockId()).getPrice());
-                portfolioResponseDto.getStockDto().add(stocksDetails.get(stock.getStockId()));
+                stocksDetails.get(stock.getStockSymbol()).setQuantity(stock.getQuantity());
+                stocksDetails.get(stock.getStockSymbol()).setBuyPrice(stock.getBuyPrice());
+                stocksDetails.get(stock.getStockSymbol()).setProfitPercentage(calculateProfitPercentage(stocksDetails, stock));
+
+                totalAmount += (stock.getQuantity() * stocksDetails.get(stock.getStockSymbol()).getPrice());
+                portfolioResponseDto.getStockDto().add(stocksDetails.get(stock.getStockSymbol()));
             }
 
             portfolioResponseDto.setTotalAmount(totalAmount);
         }
 
         return portfolioResponseDto;
+    }
+
+    private static double calculateProfitPercentage(Map<String, StockDto> stocksDetails, Portfolio stock) {
+        return (stocksDetails.get(stock.getStockSymbol()).getPrice() - stock.getBuyPrice()) / stock.getQuantity();
     }
 }

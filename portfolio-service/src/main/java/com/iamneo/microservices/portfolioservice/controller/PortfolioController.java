@@ -2,19 +2,13 @@ package com.iamneo.microservices.portfolioservice.controller;
 
 import com.iamneo.microservices.portfolioservice.model.Portfolio;
 import com.iamneo.microservices.portfolioservice.model.PortfolioResponseDto;
-import com.iamneo.microservices.portfolioservice.model.StockDto;
-import com.iamneo.microservices.portfolioservice.service.PortfolioService;
-import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import com.iamneo.microservices.portfolioservice.services.PortfolioService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import io.github.resilience4j.retry.annotation.Retry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 @RequestMapping("portfolio")

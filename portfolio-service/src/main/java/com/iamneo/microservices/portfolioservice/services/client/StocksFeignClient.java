@@ -1,4 +1,4 @@
- package com.iamneo.microservices.portfolioservice.service.client;
+ package com.iamneo.microservices.portfolioservice.services.client;
 
 import com.iamneo.microservices.portfolioservice.model.StockDto;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,5 +11,5 @@ import java.util.List;
 public interface StocksFeignClient {
 
     @RequestMapping(method = RequestMethod.POST,path = "stocks/getStockDetails",value = "getStocksList", consumes = "application/json")
-    List<StockDto> getStocksDetails(List<Long> stockList);
+    List<StockDto> getStocksDetails(List<String> stockList);
 }

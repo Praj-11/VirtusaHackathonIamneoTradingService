@@ -1,11 +1,13 @@
 package com.iamneo.microservices.stockservice.controller;
 
-import com.iamneo.microservices.stockservice.services.StockService;
+import com.iamneo.microservice.stockservice.services.StockService;
 import io.github.mainstringargs.alphavantagescraper.output.quote.data.StockQuote;
+import io.github.mainstringargs.alphavantagescraper.output.technicalindicators.EMA;
 import io.github.mainstringargs.alphavantagescraper.output.technicalindicators.SMA;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.iamneo.microservices.stockservice.model.StockDto;
 
 import java.util.List;
 
@@ -17,22 +19,22 @@ public class StockController {
     private StockService stockService;
 
     @GetMapping("/{symbol}")
-    public StockQuote fetchStockData(@PathVariable("symbol") String symbol) {
+    public StockDto fetchStockData(@PathVariable("symbol") String symbol) {
         return stockService.getStockData(symbol);
     }
 
-    @GetMapping("/sma/{symbol}")
-    public SMA fetchStocksSMAData(@PathVariable("symbol") String symbol) {
-        return stockService.getStockSMAData(symbol);
+    @GetMapping("/sma/{symbol}/{time}")
+    public SMA fetchStocksSMAData(@PathVariable("symbol") String symbol, @PathVariable("time") Integer time) {
+        return stockService.getStockSMAData(symbol, time);
     }
 
-    @GetMapping("/addFunds")
-    public SMA addFunds(@PathVariable("symbol") String symbol) {
-        return stockService.getStockSMAData(symbol);
+    @GetMapping("/ema/{symbol}/{time}")
+    public EMA fetchStocksEMAData(@PathVariable("symbol") String symbol, @PathVariable("time") Integer time) {
+        return stockService.getStockEMAData(symbol, time);
     }
 
     @PostMapping("/getStockDetails")
-    public ResponseEntity<String> fetchStockDataList(@RequestBody List<String> symbolList) {
-        return null;
+    public List<StockDto> fetchStockDataList(@RequestBody List<String> symbolList) {
+        return stockService.getStockDataList(symbolList);
     }
 }

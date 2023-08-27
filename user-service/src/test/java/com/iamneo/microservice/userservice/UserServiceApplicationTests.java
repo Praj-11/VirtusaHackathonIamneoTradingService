@@ -1,4 +1,4 @@
-package com.iamneo.microservice.userservice;
+package com.iamneo.microservices.userservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

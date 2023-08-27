@@ -22,4 +22,6 @@ public class User {
     String adharNumber;
     String city;
     String bankAccountNumber;
+    String role;
+    String password;
 }
