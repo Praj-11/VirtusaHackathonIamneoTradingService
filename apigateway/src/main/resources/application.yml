@@ -1,0 +1,30 @@
+server:
+  port: 9191
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: USER-SERVICE
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+
+        - id: FUNDS-SERVICE
+          uri: lb://FUNDS-SERVICE
+          predicates:
+            - Path=/funds/**
+
+        - id: PORTFOLIO-SERVICE
+          uri: lb://PORTFOLIO-SERVICE
+          predicates:
+            - Path=/portfolio/**
+
+        - id: STOCKS-SERVICE
+          uri: lb://STOCKS-SERVICEE
+          predicates:
+            - Path=/stock/**
