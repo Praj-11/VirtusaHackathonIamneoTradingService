@@ -1,4 +1,4 @@
-package com.iamneo.microservices.stockservice.model;
+package com.iamneo.microservices.stocksservice.model;
 
 import lombok.Data;
 

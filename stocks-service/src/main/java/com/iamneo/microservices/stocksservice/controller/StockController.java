@@ -1,13 +1,11 @@
-package com.iamneo.microservices.stockservice.controller;
+package com.iamneo.microservices.stocksservice.controller;
 
-import com.iamneo.microservice.stockservice.services.StockService;
-import io.github.mainstringargs.alphavantagescraper.output.quote.data.StockQuote;
+import com.iamneo.microservices.stocksservice.services.StockService;
 import io.github.mainstringargs.alphavantagescraper.output.technicalindicators.EMA;
 import io.github.mainstringargs.alphavantagescraper.output.technicalindicators.SMA;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import com.iamneo.microservices.stockservice.model.StockDto;
+import com.iamneo.microservices.stocksservice.model.StockDto;
 
 import java.util.List;
 

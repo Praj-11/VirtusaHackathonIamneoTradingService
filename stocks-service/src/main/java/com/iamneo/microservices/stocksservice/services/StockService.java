@@ -1,4 +1,4 @@
-package com.iamneo.microservices.stockservice.services;
+package com.iamneo.microservices.stocksservice.services;
 
 import io.github.mainstringargs.alphavantagescraper.AlphaVantageConnector;
 import io.github.mainstringargs.alphavantagescraper.StockQuotes;
@@ -10,11 +10,10 @@ import io.github.mainstringargs.alphavantagescraper.output.quote.StockQuotesResp
 import io.github.mainstringargs.alphavantagescraper.output.quote.data.StockQuote;
 import io.github.mainstringargs.alphavantagescraper.output.technicalindicators.EMA;
 import io.github.mainstringargs.alphavantagescraper.output.technicalindicators.SMA;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import com.iamneo.microservices.stockservice.model.StockDto;
+import com.iamneo.microservices.stocksservice.model.StockDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +49,6 @@ public class StockService {
         return emaResponse;
     }
 
-    @NotNull
     private AlphaVantageConnector getConnector() {
 
         int timeout = 3000;

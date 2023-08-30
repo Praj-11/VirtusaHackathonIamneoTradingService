@@ -1,4 +1,4 @@
-package com.iamneo.microservice.fundsservice;
+package com.iamneo.microservices.fundsservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
